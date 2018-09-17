@@ -1,0 +1,57 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+
+\setlength{\parindent}{0pt}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\begin{document}
+
+\title{COMP550 Natural Language Processing\\Assignment 1}
+\author{Jonathan Guymont}
+\maketitle
+
+\section*{Question 1}
+\textbf{Case 1}: "That's Wong on so many levels."\\
+
+This is an \textit{orthographic} ambiguity. The sentence could be interpreted has \textit{there is a lot of peoples call Wong on all the floors} or has the common expression \textit{that is wrong on so many levels}. The word \textit{Wong} which could be mistaken for \textit{wrong} is the cause of ambiguity. Knowing that Names are starting by a capital letter could prevent a system from making a mistake. For instance, a spell checker would probably change wong for wrong otherwise. Having access to the context would also disambiguate the sentence. \\
+
+\textbf{Source}: https://www.pinterest.ca/pin/360076932688489937/?lp=true\\
+
+\textbf{Case 2}: "But I know what I am and I'm glad I'm a man, and so is Lola"\\
+
+This is an \textit{Syntactic} ambiguity. The sentence could be interpreted has \textit{I am glad to be a man and Lola is glad to be a man} or has \textit{I am glad to be a man and Lola is glad I am a man}. The way the sentence is writen: \textit{I am glad I am [something], and so is [another person]} cause ambiguity. Without the context, knowing that Lola is more a woman name would disambiguate the passage.\\
+
+\textbf{Source}: https://www.reddit.com/r/Music/comments/2izue5/serious\_is\_lola\_a\_transvestite/\\
+
+\textbf{Case 3}: "GOP Lawmakers Grill IRS Chief Over Lost Emails"\\
+
+This is a \textit{lexical} ambiguity. The sentence could be interpreted has \textit{GOP lawmakers are grilling the chief of IRS (has in burning over a fire) for losing emails} or has \textit{GOP lawmakers are giving a hard time (without any violence) to the chief of IRS}. The word \textit{Grill} is the cause of ambiguity. Knowing that US government employees do not get totured by the government disambiguate the passage.\\
+
+\textbf{Source}: https://www.wsj.com/articles/gop-lawmakers-grill-irs-chief-over-loss-emails-1403278518?mg=id-wsj\\
+
+\textbf{Case 4}: "you look like I need a drink"\\
+
+This is a \textit{pragmatic} ambiguity. The sentence could be interpreted has \textit{I have a biological need to drink} or has \textit{I would like a drink}. The expression \textit{I need a drink} meaning \textit{I would like to have a drink} is the cause of ambiguity. Knowing the expression would disambiguate the passage.\\
+
+\textbf{Source}: https://genius.com/Justin-moore-you-look-like-i-need-a-drink-lyrics\\
+
+\textbf{Case 5}: "this is a big plane"\\
+
+This is a \textit{phonological} ambiguity. The sentence could be interpreted has \textit{this is a big plain} or has \textit{this is a big plane}. The word \textit{plane} cause of ambiguity, because we use the same phonome to say \textit{plane} or \textit{plain}. Knowing the english level of the writer and the context would help determining the chance he or she meant \textit{plain}. \\
+
+\textbf{Source}: http://livestly.com/new-worlds-largest-plane/\\
+
+\section*{Question 3}
+
+\subsection*{Problem setup}
+
+\subsection*{Experimental procedure}
+
+\subsection*{Range of parameter setting}
+
+\subsection*{Result and conclusion}
+
+\end{document}
