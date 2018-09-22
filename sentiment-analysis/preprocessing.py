@@ -1,27 +1,5 @@
-import csv
-import random
+#!/usr/bin/python3
 from sklearn.feature_extraction.text import CountVectorizer
-
-POS_REVIEW_FILE = './data/rt-polarity_pos.csv'
-NEG_REVIEW_FILE = './data/rt-polarity_neg.csv'
-
-def load_csv(path):
-    
-    out_data = []
-    with open(path, 'rb') as csvfile:
-        in_data = csv.reader(csvfile, delimiter=' ', quotechar='|')
-        for row in in_data:
-            out_data.append(' '.join(row))
-    return out_data
-
-def split_data(inputs, targets, test_pct):
-    train_pct = 1 - test_pct
-    data_size = len(targets)
-    train_size = round(train_pct*data_size) 
-    examples = range(data_size)
-
-    train_index = random.sample(examples, train_size)
-    
 
 def vectorizer(ngram_range, stop_words, max_df, min_df):
     """Term frequency vectorizer.
@@ -59,12 +37,7 @@ def vectorizer(ngram_range, stop_words, max_df, min_df):
         This parameter is ignored if vocabulary is not None.
     """
 
-    tf_vectorizer = CountVectorizer(ngram_range, stop_words, max_df, min_df)
+    tf_vectorizer = CountVectorizer(stop_words=stop_words, ngram_range=ngram_range, max_df=max_df, min_df=min_df)
 
     return tf_vectorizer
-
-if __name__ == '__main__':
-
-    POS_REVIEW = load_csv(POS_REVIEW_FILE)
-    NEG_REVIEW = load_csv(NEG_REVIEW_FILE)
 
