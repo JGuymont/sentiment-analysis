@@ -26,7 +26,7 @@ MODEL = 'lr'
 POS_REVIEW_FILE = './data/rt-polarity_pos.csv'
 NEG_REVIEW_FILE = './data/rt-polarity_neg.csv'
 ENGLISH_STOPWORDS = set(stopwords.words('english')) 
-TEST_SIZE = 0.3
+TEST_SIZE = 0.15
 
 MAX_DF_RANGE = (0.2, 0.3, 0.4, 0.5, 1.0)
 MIN_DF_RANGE = (1, 0.0001, 0.001)
@@ -102,7 +102,7 @@ def evaluate(pred, test_y):
     for i in range(test_size):
         if pred[i] == test_y[i]:
             correct += 1
-    return round(correct/test_size, 4)
+    return round(correct/test_size, 6)
 
 def run_experiment(inputs, targets, test_pct, model):
     """Run 
@@ -127,10 +127,12 @@ def run_experiment(inputs, targets, test_pct, model):
         ('clf', clf),
     ])
 
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, cv=3, refit=True, scoring='accuracy')
-    t0 = time()
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, cv=5, refit=True, scoring='accuracy')
+    start_time = time()
     grid_search.fit(train_x, train_y)
-    print("done in %0.3fs" % (time() - t0))
+    
+    print("Done in %0.3fs" % (time() - start_time))
+
     print("Best parameters set:")
     best_parameters = grid_search.best_estimator_.get_params()
     for param_name in sorted(parameters.keys()):

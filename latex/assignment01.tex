@@ -123,7 +123,7 @@ Hyperparameters include parameter for the preprocessing and parameters of the mo
 
 
 \subsection*{Result and conclusion}
-The table \ref{table:result} show the accuracy of the models that performed the best on the training set. The performance are comparable, but the logistic regression perform slightly better. It is surprising that removing a set of stopwords do not improve the accuracy on any models. This indicates that the set of stopwords provided by the library nltk contains more relevant features then unrelevant ones. In particular, nltk list of stopwords include the negative form of some verbs. For instance: haven't, isn't, shouldn't,...These may be useful features to determine wether a review is positive. For example, in "This movie isn't good." the feature "isn't" is very important.
+The table \ref{table:result} show the accuracy of the models that performed the best on the training set. The performance are comparable, but the logistic regression perform slightly better. In all case, the training set is overfited. The gap between the accuracy on the training set and the test set could be decrease with better regularisation. It is surprising that removing a set of stopwords do not improve the accuracy on any models. This indicates that the set of stopwords provided by the library nltk contains more relevant features then unrelevant ones. In particular, nltk list of stopwords include the negative form of some verbs. For instance: haven't, isn't, shouldn't,...These may be useful features to determine wether a review is positive. For example, in "This movie isn't good." the feature "isn't" is very important.
 
 \begin{table}[h!]
     \centering
@@ -134,27 +134,28 @@ The table \ref{table:result} show the accuracy of the models that performed the 
         $n$-grams 	&	2-gram 	&	2-gram	&	2-gram 	\\
         stopwords 	&	None	&	None	&	None	\\
         Min frequency threshold 	&	0.	&	0.	&	0.	\\
-        Max frequency threshold 	&	0.4	&	1.	&	0.4	\\
+        Max frequency threshold 	&	0.2	&	1.	&	0.4	\\
         $C$	&	0.25	&	na & 2.			\\
         $\alpha$	&	na	&	0.75 & na \\			
-        train accuracy 	&	0.766	&	0.78	&	0.769	\\
-        test accuracy 	&	0.786	&	0.787	&	0.795	\\
+        train accuracy 	&	1.0	&	0.995	&	1.0	\\
+        test accuracy 	&	0.791	&	0.787	&	\textbf{0.795}	\\
         \hline
     \end{tabular}
-    \caption{Models accuracy comparison (with there best choice of parameters).}
+    \caption{Models accuracy comparison (with there best choice of parameters). na means not applicable.}
     \label{table:result}
 \end{table} 
 
 \begin{table}[h!]
     \centering
-    \begin{tabular}{ |c|c| } 
+    \begin{tabular}{ c|c|c| }
+        & 0 & 1 \\
         \hline
-        0.7 & 0.3          
+        0 & 0.8 & 0.2 \\     
         \hline
-        0.2 & 0.8
+        1 & 0.21 & 0.79 \\
         \hline
     \end{tabular}
-    \caption{Confusion matrix}
+    \caption{Confusion matrix: 0 for negative and 1 for positive.}
     \label{table:result}
 \end{table}
 
