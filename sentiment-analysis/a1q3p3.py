@@ -3,10 +3,12 @@ import pickle
 import codecs
 import random
 from time import time
+import numpy as np
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
+from sklearn.metrics import confusion_matrix
 
 from sklearn.svm import LinearSVC
 from sklearn.naive_bayes import BernoulliNB
@@ -16,6 +18,7 @@ import nltk
 from nltk.corpus import stopwords
 
 nltk.download('stopwords')
+
 random.seed(1)
 
 MODEL = 'lr'
@@ -23,19 +26,20 @@ MODEL = 'lr'
 POS_REVIEW_FILE = './data/rt-polarity_pos.csv'
 NEG_REVIEW_FILE = './data/rt-polarity_neg.csv'
 ENGLISH_STOPWORDS = set(stopwords.words('english')) 
-TEST_SIZE = 0.15
+TEST_SIZE = 0.3
 
 MAX_DF_RANGE = (0.2, 0.3, 0.4, 0.5, 1.0)
 MIN_DF_RANGE = (1, 0.0001, 0.001)
 NGRAM_RANGE = ((1, 1), (1, 2))
 STOPWORDS_RANGE = (ENGLISH_STOPWORDS, None)
+C_RANGE = (0.25, 0.5, 1., 2, 3, 5)
 
 SVM_PARAMETERS = {
     'vect__max_df': MAX_DF_RANGE,
     'vect__min_df': MIN_DF_RANGE,
     'vect__ngram_range': NGRAM_RANGE,  
     'vect__stop_words': STOPWORDS_RANGE,
-    'clf__C': (0.25, 0.5, 1., 2, 3, 5),
+    'clf__C': C_RANGE, 
     'clf__loss': ('squared_hinge',)
 }
 
@@ -52,7 +56,7 @@ LR_PARAMETERS = {
     'vect__min_df': MIN_DF_RANGE,
     'vect__ngram_range': NGRAM_RANGE,  
     'vect__stop_words': STOPWORDS_RANGE,
-    'clf__C': (0.25, 0.5, 1., 2, 3, 5),
+    'clf__C': C_RANGE,
 }
 
 class Utils:
@@ -91,9 +95,8 @@ class Utils:
 
         return data
 
-def evaluate(model, test_x, test_y):
+def evaluate(pred, test_y):
     test_size = len(test_y)
-    pred = model.predict(test_x)
 
     correct = 0
     for i in range(test_size):
@@ -124,19 +127,27 @@ def run_experiment(inputs, targets, test_pct, model):
         ('clf', clf),
     ])
 
-    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, cv=5, refit=True)
+    grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, cv=3, refit=True, scoring='accuracy')
     t0 = time()
     grid_search.fit(train_x, train_y)
     print("done in %0.3fs" % (time() - t0))
-    print("Best score: %0.3f" % grid_search.best_score_)
     print("Best parameters set:")
     best_parameters = grid_search.best_estimator_.get_params()
     for param_name in sorted(parameters.keys()):
         print("\t%s: %r" % (param_name, best_parameters[param_name]))
 
-    test_acc = evaluate(grid_search, test_x, test_y)
+    train_pred = grid_search.predict(train_x)
+    train_acc = evaluate(train_pred, train_y) 
+    
+    test_pred = grid_search.predict(test_x)
+    test_acc = evaluate(test_pred, test_y)
 
-    print('test accuracy:', test_acc)
+    print(' Best train accuracy:', train_acc)
+    print(' Best test accuracy:', test_acc)
+
+    cm = confusion_matrix(test_y, test_pred)
+    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    print(cm)
 
     return 
 
@@ -151,7 +162,6 @@ if __name__ == '__main__':
     corpus = [w for x in reviews for w in x.split()]
 
     run_experiment(reviews, polarities, TEST_SIZE, MODEL)
-
     
 
     
